@@ -10,8 +10,15 @@ function boot.setup(opts)
   		boot.options = vim.tbl_deep_extend("force", boot.options, opts or {})
 
 		vim.schedule(function()
-			vim.api.nvim_buf_set_lines(0, 0, 1, false, { "bruh" })
+			local boot_utils = require('boot.utilities')
+
+			boot_utils.insert_text("EXAMPLE")
+			boot_utils.insert_text("JUST TO VERIFY THAT IT WORKS AS INTENDED")
+			boot_utils.flush()
+
     		require('boot.buffer_options').set(boot.options.buffer_options)
+
+			vim.cmd [[ autocmd VimResized Boot :lua require('boot.utilities').recenter_all() ]]
     	end)
   	end
 end
