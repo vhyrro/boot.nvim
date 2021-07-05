@@ -1,27 +1,19 @@
-local M = {}
+local boot = {
+	options = {
+		buffer_options = {}
+	}
+}
 
-local function init()
-    vim.api.nvim_put({"　 ／l、",
-    " ﾞ(ﾟ､ ｡ 𝟩",
-    "　|、ﾞ ~ヽ",
-    "　じしſ_, )ノ",
-    "We have progress, pog"}, "l", false, false)
-    vim.bo.modifiable = false
-    vim.bo.modified = false
+function boot.setup(opts)
+  	if vim.fn.expand("%:e"):len() == 0 then
+
+  		boot.options = vim.tbl_deep_extend("force", boot.options, opts or {})
+
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(0, 0, 1, false, { "bruh" })
+    		require('boot.buffer_options').set(boot.options.buffer_options)
+    	end)
+  	end
 end
 
-_G.bootloader = function()
-  if (vim.fn.argc() == 0 and vim.fn.line2byte('$') == -1) then
-    init()
-  end
-end
-
-function M.setup(opts)
-  vim.cmd[[
-  augroup BootLoader
-  autocmd Vimenter * nested call v:lua.bootloader()
-  augroup END
-  ]]
-end
-
-return M
+return boot
